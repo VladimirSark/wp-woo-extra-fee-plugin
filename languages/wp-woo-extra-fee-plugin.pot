@@ -1,0 +1,11 @@
+msgid "Extra Fee"
+msgstr ""
+
+msgid "An extra fee will be applied when products with different shipping classes are in the cart."
+msgstr ""
+
+msgid "Shipping Class Mismatch"
+msgstr ""
+
+msgid "The extra fee for different shipping classes is: %s"
+msgstr ""
