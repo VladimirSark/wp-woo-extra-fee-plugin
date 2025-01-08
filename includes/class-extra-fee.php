@@ -32,7 +32,8 @@ class ExtraFee {
             $num_fees_to_add = $num_shipping_classes - 1;
             $total_fee = $num_fees_to_add * $this->collection_fee_amount;
             $tax_rate = 0.21; // 21% tax
-            $total_fee_with_tax = $total_fee * (1 + $tax_rate);
+            $tax_amount = $total_fee * $tax_rate;
+            $total_fee_with_tax = $total_fee + $tax_amount;
             $woocommerce->cart->add_fee($this->collection_fee_name, $total_fee_with_tax, true);
         }
     }
