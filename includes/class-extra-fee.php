@@ -39,6 +39,6 @@ class ExtraFee {
 }
 
 // Initialize the ExtraFee class with the Collection fee amount and name
-$collection_fee_amount = 0.99; // Set your collection fee amount here
+$collection_fee_amount = 0.82; // Set your collection fee amount here
 $collection_fee_name = 'Siuntimas iš skirtingų sandėlių'; // Set your collection fee name here
 new ExtraFee($collection_fee_amount, $collection_fee_name);
