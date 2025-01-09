@@ -1,6 +1,4 @@
 <?php
-// filepath: includes/class-extra-fee.php
-
 class ExtraFee {
     private $collection_fee_amount;
     private $collection_fee_name;
@@ -9,6 +7,7 @@ class ExtraFee {
         $this->collection_fee_amount = $collection_fee_amount;
         $this->collection_fee_name = $collection_fee_name;
         add_action('woocommerce_cart_calculate_fees', array($this, 'add_collection_fee'));
+        add_action('woocommerce_single_product_summary', array($this, 'show_shipping_class_on_product_page'), 25);
     }
 
     public function add_collection_fee() {
@@ -32,6 +31,18 @@ class ExtraFee {
             $num_fees_to_add = $num_shipping_classes - 1;
             $total_fee = $num_fees_to_add * $this->collection_fee_amount;
             $woocommerce->cart->add_fee($this->collection_fee_name, $total_fee, true); // true makes the fee taxable
+        }
+    }
+
+    public function show_shipping_class_on_product_page() {
+        global $product;
+
+        $shipping_class_id = $product->get_shipping_class_id();
+
+        if ($shipping_class_id > 0) {
+            $shipping_class = get_term($shipping_class_id, 'product_shipping_class');
+            $shipping_class_name = $shipping_class->name;
+            echo '<p class="shipping-class">Sandėliuojama: ' . $shipping_class_name . '</p>';
         }
     }
 }
