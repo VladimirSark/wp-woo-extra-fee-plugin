@@ -11,11 +11,13 @@ class ExtraFee {
         add_action('woocommerce_cart_calculate_fees', array($this, 'add_collection_fee'));
     }
 
-    public function add_collection_fee() {
-        global $woocommerce;
+    public function add_collection_fee($cart) {
+        if (is_admin() && !defined('DOING_AJAX')) {
+            return;
+        }
 
         $shipping_classes = array();
-        foreach ($woocommerce->cart->get_cart() as $cart_item_key => $cart_item) {
+        foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
             $product_id = $cart_item['product_id'];
             $shipping_class_id = get_the_terms($product_id, 'product_shipping_class');
             if ($shipping_class_id && !is_wp_error($shipping_class_id)) {
@@ -32,7 +34,7 @@ class ExtraFee {
             $num_fees_to_add = $num_shipping_classes - 1;
             $total_fee = $num_fees_to_add * $this->collection_fee_amount;
             $total_amount = wc_get_price_including_tax((object) array('price' => $total_fee));
-            $woocommerce->cart->add_fee($this->collection_fee_name, $total_amount, true);
+            $cart->add_fee($this->collection_fee_name, $total_amount, true);
         }
     }
 }
