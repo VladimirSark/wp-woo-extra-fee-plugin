@@ -7,7 +7,7 @@ class ExtraFee {
         $this->collection_fee_amount = $collection_fee_amount;
         $this->collection_fee_name = $collection_fee_name;
         add_action('woocommerce_cart_calculate_fees', array($this, 'add_collection_fee'));
-        add_action('woocommerce_single_product_summary', array($this, 'show_shipping_class_on_product_page'), 25);
+        add_action('woocommerce_single_product_summary', array($this, 'show_shipping_class_on_product_page'), 30); // Adjusted priority to 30
     }
 
     public function add_collection_fee() {
