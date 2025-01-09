@@ -4,12 +4,10 @@
 class ExtraFee {
     private $collection_fee_amount;
     private $collection_fee_name;
-    private $tax_rate;
 
-    public function __construct($collection_fee_amount, $collection_fee_name, $tax_rate) {
+    public function __construct($collection_fee_amount, $collection_fee_name) {
         $this->collection_fee_amount = $collection_fee_amount;
         $this->collection_fee_name = $collection_fee_name;
-        $this->tax_rate = $tax_rate;
         add_action('woocommerce_cart_calculate_fees', array($this, 'add_collection_fee'));
     }
 
@@ -33,7 +31,7 @@ class ExtraFee {
         if ($num_shipping_classes > 1) {
             $num_fees_to_add = $num_shipping_classes - 1;
             $total_fee = $num_fees_to_add * $this->collection_fee_amount;
-            $total_amount = $total_fee * (1 + $this->tax_rate);
+            $total_amount = wc_get_price_including_tax((object) array('price' => $total_fee));
             $woocommerce->cart->add_fee($this->collection_fee_name, $total_amount, true);
         }
     }
