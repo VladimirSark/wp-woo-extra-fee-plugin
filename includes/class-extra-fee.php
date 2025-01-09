@@ -33,15 +33,8 @@ class ExtraFee {
         if ($num_shipping_classes > 1) {
             $num_fees_to_add = $num_shipping_classes - 1;
             $total_fee = $num_fees_to_add * $this->collection_fee_amount;
-            $total_tax = $total_fee * $this->tax_rate;
-            $total_amount = $total_fee + $total_tax;
+            $total_amount = $total_fee * (1 + $this->tax_rate);
             $woocommerce->cart->add_fee($this->collection_fee_name, $total_amount, true);
         }
     }
 }
-
-// Initialize the ExtraFee class with the Collection fee amount, name, and tax rate
-$collection_fee_amount = 0.82; // Base fee amount
-$collection_fee_name = 'Siuntimas iš skirtingų sandėlių'; // Fee name
-$tax_rate = 0.21; // Tax rate (21%)
-new ExtraFee($collection_fee_amount, $collection_fee_name, $tax_rate);
