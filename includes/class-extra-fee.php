@@ -4,10 +4,12 @@
 class ExtraFee {
     private $collection_fee_amount;
     private $collection_fee_name;
+    private $tax_rate;
 
-    public function __construct($collection_fee_amount, $collection_fee_name) {
+    public function __construct($collection_fee_amount, $collection_fee_name, $tax_rate) {
         $this->collection_fee_amount = $collection_fee_amount;
         $this->collection_fee_name = $collection_fee_name;
+        $this->tax_rate = $tax_rate;
         add_action('woocommerce_cart_calculate_fees', array($this, 'add_collection_fee'));
     }
 
@@ -31,15 +33,15 @@ class ExtraFee {
         if ($num_shipping_classes > 1) {
             $num_fees_to_add = $num_shipping_classes - 1;
             $total_fee = $num_fees_to_add * $this->collection_fee_amount;
-            $tax_rate = 0.21; // 21% tax
-            $tax_amount = $total_fee * $tax_rate;
-            $total_fee_with_tax = $total_fee + $tax_amount;
-            $woocommerce->cart->add_fee($this->collection_fee_name, $total_fee_with_tax, true);
+            $total_tax = $total_fee * $this->tax_rate;
+            $total_amount = $total_fee + $total_tax;
+            $woocommerce->cart->add_fee($this->collection_fee_name, $total_amount, true);
         }
     }
 }
 
-// Initialize the ExtraFee class with the Collection fee amount and name
-$collection_fee_amount = 0.82; // Set your collection fee amount here
-$collection_fee_name = 'Siuntimas iš skirtingų sandėlių'; // Set your collection fee name here
-new ExtraFee($collection_fee_amount, $collection_fee_name);
+// Initialize the ExtraFee class with the Collection fee amount, name, and tax rate
+$collection_fee_amount = 0.82; // Base fee amount
+$collection_fee_name = 'Siuntimas iš skirtingų sandėlių'; // Fee name
+$tax_rate = 0.21; // Tax rate (21%)
+new ExtraFee($collection_fee_amount, $collection_fee_name, $tax_rate);
